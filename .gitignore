@@ -1,0 +1,7 @@
+# 构建期原始素材与克隆仓库，不进部署包
+data/external/
+.venv/
+__pycache__/
+*.pyc
+data/bm25.pkl
+tests/report.json

@@ -1,0 +1,69 @@
+"""行动建议：按「建议优先做 / 如果协商不成再做」两段输出阶梯式步骤。
+
+- 基础步骤来自 advice_map（人工编写）；
+- 在基础步骤之上，按 facts 抽取到的本轮标记**追加条件化步骤**（例如：没有凭证 → 先补凭证；
+  遭遇威胁式催收 → 先固定证据并可报警）。这样不同情形拿到的建议不会一模一样；
+- 未知场景给通用路径（固定证据 → 协商 → 投诉/咨询 → 必要时诉讼）。
+只提供信息与路径，不替用户做决定。
+"""
+from __future__ import annotations
+
+from .facts import Facts
+from .maps import load_maps
+
+STAGE_LABEL = {"priority": "建议优先做", "escalate": "如果协商不成再做"}
+
+# (所需 flag, 插入位置, 文案)——按顺序检查，命中即追加。
+CONDITIONAL: dict[str, list[tuple[str, str, str]]] = {
+    "rental": [
+        ("no_contract", "priority", "你们没有书面合同：尽量把微信/口头约定固化成文字（让对方在聊天里确认），并整理押金支付记录与退房时的房屋照片。"),
+        ("no_proof", "priority", "押金支付缺少凭证：先补齐转账记录，或请对方补开收据；这一步会直接影响押金能否顺利主张返还。"),
+        ("damage_claim", "escalate", "针对房东主张的「损坏」：要求对方说明具体部位并提供证据，主张损坏发生在你入住之前或属正常磨损的，需要你来举证反驳。"),
+        ("repair", "priority", "房屋维修问题：先以书面方式（微信/短信）通知房东在合理期限内维修并保留沟通记录，这是主张费用或解除合同的前提。"),
+        ("sublet", "escalate", "涉及二房东/转租：先确认原房东是否同意转租，必要时直接联系产权人核实，避免二房东跑路后无处追索。"),
+    ],
+    "parttime": [
+        ("no_agreement", "priority", "缺少书面或聊天约定：先通过微信等可留痕方式让对方确认「干了什么、多少钱、什么时候结」，把口头约定变成证据。"),
+        ("probation", "priority", "对方设了试用期：非全日制用工依法不得约定试用期，试用期不付工资没有依据，可据此直接主张。"),
+        ("personal", "priority", "雇主偏个人（同学/朋友/私人介绍）：注意区分劳动关系与劳务关系，两种路径的维权部门和时效都不同，先按实际用工情况判断。"),
+        ("hourly", "escalate", "按小时结算的：核对是否低于当地非全日制最低小时工资标准，低于部分可以主张补足。"),
+    ],
+    "consumer": [
+        ("no_evidence", "priority", "证据不足：尽快导出订单、聊天记录、商品照片或开箱视频；维权能不能成立，很大程度取决于证据是否完整。"),
+        ("within_7d", "priority", "还在收到货 7 天内：优先主张「七天无理由退货」（法定例外商品除外），这一步成本最低。"),
+        ("fraud", "escalate", "怀疑构成欺诈：可主张「退一赔三」，但需要能证明对方主观上存在虚假或隐瞒，注意把宣传页面对比留存下来。"),
+        ("food", "priority", "涉及食品安全：保留实物、包装、订单与就医记录，可依法主张惩罚性赔偿，并同步向市场监管部门投诉。"),
+    ],
+    "ip": [
+        ("no_proof", "priority", "时间先后证据不足：先固定原稿的创建/修改时间、提交记录、云盘历史版本等，证明「你更早完成」。"),
+        ("peer", "escalate", "涉嫌侵权方是同学：可先向学校（院系、学术委员会）投诉，校内处理往往比诉讼更快，同时保留证据不要删除。"),
+        ("published", "priority", "作品已被提交或发表：尽快向对应平台/期刊/赛事主办方发送侵权通知，要求下架或撤稿，并留存发送记录。"),
+        ("commercial", "escalate", "对方存在营利使用：除要求停止侵权外，可主张按实际损失、对方违法所得或权利使用费计算赔偿。"),
+    ],
+    "loan": [
+        ("cut_interest", "priority", "存在先扣费用（砍头息）：实际借款本金应以你**实际到手**的金额计算，被预先扣除的部分不应计入本金。"),
+        ("high_rate", "priority", "利息明显偏高：先按实际到手金额和全部费用折算真实年化成本，再对照法定上限判断哪些利息可以不认。"),
+        ("violent_collection", "priority", "遭遇爆通讯录、恐吓等催收：立即保存通话录音、短信与聊天截图，情况严重的可以报警，并向平台及监管部门投诉。"),
+        ("overdue", "escalate", "已经逾期：不要以贷养贷，先列出全部债务与真实利率，必要时与家人沟通并寻求正规的债务协商渠道。"),
+    ],
+}
+
+_GENERIC: list[dict] = [
+    {"stage": "priority", "text": "先把事实和证据固定下来：发生了什么、时间、对方是谁、有哪些书面或电子记录（合同、聊天记录、转账凭证、照片）。"},
+    {"stage": "priority", "text": "用可留痕的方式（书面、微信、短信）与对方沟通一次，明确你的诉求和期限。"},
+    {"stage": "escalate", "text": "协商不成的，向对应主管部门投诉或申请调解（不同领域的主管部门不同）。"},
+    {"stage": "escalate", "text": "仍无法解决的，可考虑仲裁或向法院起诉；起诉前整理证据清单。"},
+    {"stage": "escalate", "text": "涉及金额较大或情况复杂，建议尽早咨询专业律师。"},
+]
+
+
+def advise(scene_id: str, facts: Facts | None = None) -> list[dict]:
+    steps = load_maps().advice_for(scene_id) if scene_id != "unknown" else []
+    if not steps:
+        steps = _GENERIC
+    else:
+        steps = list(steps)
+        for flag, stage, text in CONDITIONAL.get(scene_id, []):
+            if facts and facts.has(flag):
+                steps.append({"stage": stage, "text": text})
+    return [{**s, "label": STAGE_LABEL.get(s["stage"], "建议")} for s in steps]

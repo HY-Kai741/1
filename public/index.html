@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>大学生法律常识问答助手</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">法</div>
+      <div>
+        <h1>大学生法律常识问答助手</h1>
+        <p class="sub">租房押金 · 兼职欠薪 · 消费维权 · 知识产权 · 借贷风险</p>
+      </div>
+    </div>
+    <div class="kb-badge" id="kbBadge" title="本地法律知识库（离线，无需 API key）">知识库加载中…</div>
+  </header>
+
+  <main class="layout">
+    <aside class="side">
+      <h2>常见情形</h2>
+      <div id="sceneList" class="scenes"></div>
+      <div class="side-foot">
+        <p>本助手只做三件事：<strong>找到相关法条</strong>、<strong>翻译成人话</strong>、<strong>告诉你下一步怎么走</strong>。</p>
+        <p class="muted">不提供法律意见，不代替你做决定。</p>
+      </div>
+    </aside>
+
+    <section class="chat">
+      <div id="feed" class="feed">
+        <div class="turn">
+          <div class="card intro">
+            <h3>先说清楚你遇到了什么</h3>
+            <p>用一两句话描述就行，例如"退租时房东不退我押金，说我弄脏了墙"。信息越具体（时间、对方是谁、有什么证据），给出的法条和路径越准。</p>
+            <p class="muted">若关键信息缺失，我会先追问，不会替你假设。</p>
+          </div>
+        </div>
+      </div>
+
+      <form id="composer" class="composer" autocomplete="off">
+        <textarea id="query" rows="1" placeholder="描述你的情况…（Enter 发送，Shift+Enter 换行）"></textarea>
+        <button id="sendBtn" type="submit">发送</button>
+      </form>
+      <div class="hintbar">
+        <span id="statusHint"></span>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
