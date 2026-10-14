@@ -28,6 +28,7 @@
     LLM_MODEL=deepseek-chat
     LLM_TIMEOUT=45          # 可选
     LLM_RETRIES=1           # 可选
+    LLM_THINKING=off        # 可选，默认 off：关闭推理链（见 _thinking_param 的说明）
 """
 from __future__ import annotations
 
@@ -119,6 +120,22 @@ def _provider_hint() -> str | None:
 
 # ---------------------------------------------------------------- HTTP
 
+def _thinking_param() -> dict | None:
+    """是否关闭「深度思考」，默认关闭（``LLM_THINKING=on`` 可恢复厂商默认）。
+
+    部分推理模型（如火山方舟上的 DeepSeek V4 系列）会把 ``max_tokens`` 预算全部用在
+    ``reasoning_content`` 上，使 ``content`` 为空、``finish_reason`` 为 ``length``；
+    上层只会看到「静默降级」，极难定位（本项目实测踩过）。
+
+    本项目 LLM 只承担措辞改写，不需要推理链，故默认关闭。若端点不认该字段而返回 400，
+    下面的降级逻辑会自动摘除后重试。
+    """
+    mode = os.environ.get("LLM_THINKING", "off").strip().lower()
+    if mode in ("off", "disabled", "0", "false", "no"):
+        return {"type": "disabled"}
+    return None
+
+
 def _post(payload: dict) -> dict | None:
     """POST 到 ``{BASE_URL}/chat/completions``，带重试与 400 自动降级。"""
     base = os.environ["LLM_BASE_URL"].rstrip("/")
@@ -130,6 +147,11 @@ def _post(payload: dict) -> dict | None:
     timeout = _int_env("LLM_TIMEOUT", 45)
     retries = _int_env("LLM_RETRIES", 1)
 
+    # 不改调用方的 dict（重试期间会摘键降级）
+    thinking = _thinking_param()
+    if thinking is not None:
+        payload = {**payload, "thinking": thinking}
+
     for attempt in range(retries + 1):
         body = json.dumps(payload).encode("utf-8")
         try:
@@ -139,10 +161,10 @@ def _post(payload: dict) -> dict | None:
                     raise RuntimeError(f"http {resp.status}")
                 return json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
-            # 部分厂商不认 response_format / max_tokens —— 去掉后重试一次
+            # 部分厂商不认 thinking / response_format / max_tokens —— 去掉后重试一次
             downgraded = False
             if exc.code == 400:
-                for key in ("response_format", "max_tokens", "temperature"):
+                for key in ("thinking", "response_format", "max_tokens", "temperature"):
                     if key in payload:
                         payload.pop(key)
                         downgraded = True
@@ -185,11 +207,21 @@ def chat(
     if not data:
         return None
     try:
-        text = (data["choices"][0]["message"]["content"] or "").strip()
+        choice = (data["choices"] or [{}])[0]
+        message = choice.get("message") or {}
+        text = (message.get("content") or "").strip()
     except (KeyError, IndexError, TypeError):
         log("llm.parse.fail", level="warn")
         return None
-    return text or None
+    if not text:
+        # 推理模型把预算耗在 reasoning_content 上时 content 会为空 —— 必须留痕，
+        # 否则上层只看到「静默降级」，无法定位（本项目实测踩过）。
+        log("llm.empty_content", level="warn",
+            finish_reason=choice.get("finish_reason"),
+            reasoning_chars=len(message.get("reasoning_content") or ""),
+            thinking=os.environ.get("LLM_THINKING", "off"))
+        return None
+    return text
 
 
 _FENCE = re.compile(r"^\s*```(?:json)?\s*|\s*```\s*$", re.IGNORECASE)
@@ -232,7 +264,7 @@ def polish(statute) -> str | None:
             "现有解释": getattr(statute, "explain", "") or "",
         }, ensure_ascii=False),
         temperature=0.2,
-        max_tokens=400,
+        max_tokens=800,
     )
     if not text or len(text) > 600:
         return None

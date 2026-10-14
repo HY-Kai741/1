@@ -99,7 +99,7 @@ def handle(
 
         # ---- 5. 通俗解释 ----
         sp = obs.span(trace_id, "explain")
-        explains = [explain_mod.explain(s) for s in found]
+        explains = explain_mod.explain_all(found)
         timings["explain"] = sp.ok(count=len(explains))
         stage("explain", count=len(explains))
 
