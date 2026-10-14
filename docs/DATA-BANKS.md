@@ -174,7 +174,8 @@ python scripts/fetch_banks.py --fetch jecqa_ca legalqa --allow-restricted
 python scripts/fetch_banks.py --report
 ```
 
-依赖：`pyarrow`（解析 parquet 格式的题库）。已加入 `requirements.txt`。
+依赖：`pyarrow`（解析 parquet 格式的题库）。属**构建期依赖**，已单独放在 `requirements-build.txt`，
+不进入运行时 `requirements.txt`（部署沙箱不必安装）。
 
 落盘位置：
 

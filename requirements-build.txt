@@ -1,0 +1,5 @@
+# 构建期工具依赖（运行时不需要，不随部署安装）
+#   仅 scripts/fetch_banks.py 解析 parquet 格式的外部题库时需要
+# 安装：pip install -r requirements-build.txt
+-r requirements.txt
+pyarrow>=14.0

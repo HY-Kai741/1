@@ -48,7 +48,8 @@ flowchart TD
 ```
 大学生法律常识问答/
 ├── server.py                     # 单端口 HTTP 服务（仅标准库 http.server）
-├── requirements.txt              # jieba / rank-bm25（纯 Python）
+├── requirements.txt              # 运行时依赖：jieba / rank-bm25（纯 Python）
+├── requirements-build.txt        # 构建期依赖：+ pyarrow（仅抓外部语料用，不随部署安装）
 ├── legal_agent/
 │   ├── pipeline.py               # 编排 + trace + 阶段回调
 │   ├── guard.py                  # 输入校验 / 注入拦截 / 拒答红线
