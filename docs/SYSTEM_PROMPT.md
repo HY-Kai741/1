@@ -83,7 +83,7 @@
 | 场景识别（关键词加权打分；`sceneId` 仅作兜底） | `legal_agent/scene.py` + `legal_agent/pipeline.py` |
 | 关键信息核对 | `legal_agent/slots.py` + `legal_agent/data/slot_hints.json` |
 | 法条检索与核验 | `legal_agent/statutes.py`（映射优先 → BM25 兜底） |
-| 场景→法条映射（35 条，构建期逐条核验） | `legal_agent/data/scene_map.json` + `scripts/verify_maps.py` |
+| 场景→法条映射（8 个领域 / 60 条，构建期逐条核验） | `legal_agent/data/scene_map.json` + `scripts/verify_maps.py` |
 | 通俗解释 | `legal_agent/explain.py` + `legal_agent/data/explain_map.json` |
 | 本轮事实抽取（金额/凭证/时间/对方行为） | `legal_agent/facts.py` |
 | 阶梯式建议（基础 + 按事实条件化） | `legal_agent/advice.py` + `legal_agent/data/advice_map.json` |
@@ -113,5 +113,5 @@
 1. 法条库为**宪法、法律、立法解释**共 378 部 / 23,995 条现行条文，**不含司法解释、行政法规、地方性法规**。
    - 因此"民间借贷利率司法保护上限"等由司法解释确定的标准，系统只能说"需另行核实"。
 2. 语料存在同名同条号多行的情况（42 处，集中在《刑法》修正案相关条目）。系统对映射命中的法条按主键
-   取值并返回 `article_id` 以保证可溯源；专项五领域的 35 条法条已逐条核验，**0 条落在冲突集内**。
+   取值并返回 `article_id` 以保证可溯源；专项八领域的 60 条法条已逐条核验，**0 条落在冲突集内**。
 3. 本系统只做条文检索、解释与路径提示，**不构成法律意见**。

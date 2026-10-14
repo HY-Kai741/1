@@ -51,7 +51,7 @@ def main(strict: bool = False) -> int:
         for r in conflicts[:15]:
             print(f"  - {r['law_name']} 第{r['article_no_arabic']}条：{r['n']} 行 / {r['d']} 种文本")
 
-    # 关键核验：专项映射引用的 35 条法条，是否有落在冲突集内的
+    # 关键核验：专项映射引用的 60 条法条（8 个领域），是否有落在冲突集内的
     from legal_agent.maps import load_maps
     ret = lawkb.retrieval
     mapped: list[tuple[str, int, str]] = []
@@ -78,7 +78,7 @@ def main(strict: bool = False) -> int:
 
     print("\n影响与处置：")
     print("  1) 映射命中的法条一律按主键 id 取值，并随结果返回 article_id，保证可溯源；")
-    print("  2) 专项五领域法条已在构建期逐条核验（scripts/verify_maps.py）通过；")
+    print("  2) 专项八领域法条已在构建期逐条核验（scripts/verify_maps.py）通过；")
     print("  3) 兜底检索路径命中的条文会标注「仅供参考」，请以官方公布文本为准。")
 
     if strict and conflict_total:

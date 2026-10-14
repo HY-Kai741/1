@@ -3,6 +3,12 @@
 {"id":"C3","category":"normal","title":"网购退货","message":"我在淘宝买的东西和描述不符，收到才3天，想退货商家不给退，有订单截图和开箱视频，就是普通衣服。","expect":{"type":"answer","scene":"consumer","must_cite":["消费者权益保护法|25"]}}
 {"id":"C4","category":"normal","title":"校园贷","message":"我在一个网贷平台借了5000，实际到手4200，月息很高，现在还不上，他们打电话给我同学和父母。","expect":{"type":"answer","scene":"loan","must_cite":["民法典|680"]}}
 {"id":"C5","category":"normal","title":"论文抄袭","message":"我写的论文被同学抄了，他改了个标题就提交了，我这里有原稿和提交记录，查重相似度90%。","expect":{"type":"answer","scene":"ip","must_cite":["著作权法|52"]}}
+{"id":"C6","category":"normal","title":"强制授权与信息泄露","message":"我下载一个 App，不给它通讯录和位置权限就不让用，之后总接到推销电话，怀疑信息被泄露了。","expect":{"type":"answer","scene":"network","must_cite":["民法典|1035"],"min_statutes":2}}
+{"id":"C7","category":"normal","title":"恋爱转账能否要回","message":"我和对象恋爱两年，期间转了不少钱，现在分手了，想把钱要回来，一共3万。","expect":{"type":"answer","scene":"marriage","must_cite":["民法典|657"]}}
+{"id":"C8","category":"normal","title":"交通事故赔偿","message":"我骑电动车被一辆车撞了，对方全责，我住院花了8000，想问他怎么赔偿。","expect":{"type":"answer","scene":"injury","must_cite":["民法典|1179"]}}
+{"id":"C9","category":"normal","title":"借卡过账风险","message":"有人让我把银行卡借给他过账，说给我500块好处费，这有风险吗？","expect":{"type":"answer","scene":"network","must_cite":["反电信网络诈骗法|31"]}}
+{"id":"C10","category":"normal","title":"彩礼能否返还","message":"我和对象订婚给了10万彩礼，现在婚没结成，彩礼能退吗？","expect":{"type":"answer","scene":"marriage","must_cite":["民法典|1042"]}}
+{"id":"C11","category":"normal","title":"好意同乘","message":"同学开车免费捎我回家，路上出事故我受伤了，我能找他赔吗？","expect":{"type":"answer","scene":"injury","must_cite":["民法典|1217"]}}
 
 {"id":"B1","category":"boundary","title":"关键信息缺失应追问","message":"房东不退我押金。","expect":{"type":"answer","scene":"rental","missing_min":1}}
 {"id":"B2","category":"boundary","title":"房屋维修义务","message":"我租的房子漏水，房东不修，我自己找人修了，能找他报销吗？","expect":{"type":"answer","scene":"rental","must_cite":["民法典|713"]}}
@@ -12,7 +18,7 @@
 {"id":"B6","category":"boundary","title":"未署名使用作品","message":"我的设计作品被人拿去用了，但没署我的名字，算侵权吗？","expect":{"type":"answer","scene":"ip","must_cite":["著作权法|11"]}}
 {"id":"B7","category":"boundary","title":"空输入","message":"","expect":{"type":"blocked","code":"empty"}}
 {"id":"B8","category":"boundary","title":"超长输入","message":"__REPEAT_3000__","expect":{"type":"blocked","code":"too_long"}}
-{"id":"B9","category":"boundary","title":"超出专项范围走兜底","message":"我骑电动车把人撞了，对方要我赔钱，我该怎么办？","expect":{"type":"answer","mode":"fallback","notes_contain":["仅供参考"]}}
+{"id":"B9","category":"boundary","title":"超出专项范围走兜底","message":"我想问一下公司股权转让需要办理什么手续？","expect":{"type":"answer","mode":"fallback","notes_contain":["仅供参考"]}}
 {"id":"B10","category":"boundary","title":"招呼语","message":"你好","expect":{"type":"prompt"}}
 {"id":"B11","category":"boundary","title":"已选定领域快捷入口","message":"押金不退，还没签合同","sceneId":"rental","expect":{"type":"answer","scene":"rental"}}
 

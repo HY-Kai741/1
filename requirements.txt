@@ -1,3 +1,6 @@
 # 运行时依赖（均为纯 Python，无原生编译）
 jieba==0.42.1
 rank-bm25==0.2.2
+
+# 构建期工具依赖（仅 scripts/fetch_banks.py 解析 parquet 题库时需要，运行时不需要）
+pyarrow>=14.0

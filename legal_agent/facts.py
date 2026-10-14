@@ -229,12 +229,134 @@ def _loan(text: str, f: Facts) -> None:
         f.points.append(f"借款渠道：{ch}")
 
 
+def _network(text: str, f: Facts) -> None:
+    info = [w for w in ("人脸", "刷脸", "身份证", "通讯录", "位置", "定位", "行踪",
+                        "手机号", "相册", "照片", "姓名") if w in text]
+    if info:
+        f.points.append("涉及的信息类型：" + "、".join(dict.fromkeys(info)))
+    if _hit(text, "强制", "不给权限", "不同意就", "不授权就", "必须授权", "不同意就不"):
+        f.flags["force_authorize"] = True
+        f.points.append("对方以「不授权就不能使用」相要挟（强制授权）")
+    if _hit(text, "泄露", "被泄露", "倒卖", "被曝光", "被卖了"):
+        f.flags["leak"] = True
+        f.points.append("个人信息已被泄露或被他人获知")
+    if _hit(text, "银行卡", "电话卡", "借给别人", "出借", "卖卡", "跑分", "过账",
+             "代收", "代付", "刷流水"):
+        f.flags["two_cards"] = True
+        f.points.append("涉及出租、出借银行卡 / 电话卡或代人过账")
+    if _hit(text, "诈骗", "刷单", "返利", "冒充客服", "验证码", "钓鱼", "垫付", "先交钱"):
+        f.flags["scam"] = True
+        f.points.append("存在疑似电信网络诈骗的情形（刷单返利 / 冒充客服 / 索要验证码等）")
+    src = next((c for c in ("App", "app", "小程序", "平台", "网站") if c in text), None)
+    if src:
+        f.points.append(f"对方为网络平台或应用（{src}）")
+    if _hit(text, "陌生", "来电", "短信"):
+        f.flags["stranger"] = True
+        f.points.append("对方通过来电 / 短信等远程方式联系")
+    if _hit(text, "未成年", "未满 18", "17 岁", "16 岁"):
+        f.flags["minor"] = True
+        f.points.append("当事人可能为未成年人")
+    amts = [a for a in _amounts(text) if a >= 50]
+    if amts:
+        f.points.append(f"涉及金额约 {_fmt(max(amts))}")
+    if _hit(text, "截图", "聊天记录", "通话", "录音", "转账记录", "订单", "凭证"):
+        f.flags["has_evidence"] = True
+        f.points.append("留有截图 / 聊天或通话记录等证据")
+    else:
+        f.flags["no_evidence"] = True
+
+
+def _marriage(text: str, f: Facts) -> None:
+    if _hit(text, "恋爱", "男朋友", "女朋友", "前男友", "前女友", "对象"):
+        f.points.append("双方为恋爱关系")
+    if _hit(text, "分手"):
+        f.points.append("双方已分手")
+    if _hit(text, "订婚", "彩礼", "聘礼", "嫁妆"):
+        f.flags["betrothal"] = True
+        f.points.append("涉及婚前给付（彩礼 / 聘礼 / 嫁妆）")
+    if _hit(text, "已婚", "已经结婚", "已结婚", "领证了", "登记结婚", "结了婚"):
+        f.points.append("已办理结婚登记或处于婚姻关系")
+    elif _hit(text, "准备结婚", "想结婚", "打算结婚", "不结婚", "没结婚", "没领证", "婚没结成", "还没结"):
+        f.points.append("尚未完成结婚登记")
+    if _hit(text, "离婚", "净身出户"):
+        f.flags["divorce"] = True
+        f.points.append("涉及离婚与财产分割")
+    if _hit(text, "借", "还给我", "要我还", "欠"):
+        f.flags["loan_nature"] = True
+        f.points.append("存在主张为借款的表述")
+    if _hit(text, "礼物", "送", "赠与", "生日", "节日", "520", "1314", "情人节", "日常"):
+        f.flags["gift"] = True
+        f.points.append("该笔支出可能是赠与（礼物 / 节日 / 日常消费）")
+        if _hit(text, "520", "1314", "礼物", "生日", "节日", "情人节", "日常"):
+            f.flags["gift_small"] = True
+    amts = [a for a in _amounts(text) if a >= 100]
+    if amts:
+        f.points.append(f"涉及金额约 {_fmt(max(amts))}")
+    if _hit(text, "家暴", "家庭暴力", "殴打", "打我"):
+        f.flags["violence"] = True
+        f.points.append("涉及家庭暴力")
+    if _hit(text, "共同债务", "债务", "欠款", "贷款"):
+        f.flags["debt"] = True
+        f.points.append("涉及债务归属问题")
+    if _hit(text, "转账记录", "流水", "聊天记录", "截图", "凭证", "转账"):
+        f.flags["has_proof"] = True
+        f.points.append("有转账记录 / 聊天记录等凭证")
+    else:
+        f.flags["no_proof"] = True
+
+
+def _injury(text: str, f: Facts) -> None:
+    role = None
+    if _hit(text, "行人", "走路", "步行"):
+        role = "行人"
+    elif _hit(text, "坐车", "乘车", "乘客", "坐在", "捎我", "捎带", "带我", "顺路"):
+        role = "乘车人"
+    elif _hit(text, "电动车", "自行车", "骑车", "摩托"):
+        role = "非机动车（骑车人）"
+    elif _hit(text, "我开车", "我开的", "我驾驶", "我是司机", "驾车"):
+        role = "机动车驾驶人"
+    if role:
+        f.points.append(f"当事人在事故中的身份：{role}")
+    if _hit(text, "认定书", "交警", "全责", "主责", "次责", "同等责任"):
+        f.flags["has_report"] = True
+        f.points.append("已有交警介入或事故责任认定")
+    else:
+        f.flags["no_report"] = True
+    loss = [w for w in ("医疗费", "医药费", "住院", "手术", "误工", "护理", "伤残",
+                        "骨折", "受伤", "擦伤", "缝针", "修车", "财产损失") if w in text]
+    if loss:
+        f.points.append("已发生的损害：" + "、".join(dict.fromkeys(loss)))
+    if _hit(text, "逃逸", "跑了", "撞了就", "肇事逃逸"):
+        f.flags["hit_and_run"] = True
+        f.points.append("对方存在逃逸情形")
+    if _hit(text, "顺路", "捎", "带我", "免费", "好意"):
+        f.flags["hitchhike"] = True
+        f.points.append("涉及好意同乘（无偿搭乘）")
+    if _hit(text, "没保险", "没买保险", "未投保"):
+        f.flags["no_insurance"] = True
+        f.points.append("对方可能未投保或保险不足")
+    if _hit(text, "保险", "交强险", "商业险"):
+        f.points.append("已涉及保险理赔")
+    if _hit(text, "我也有责任", "闯红灯", "逆行", "我全责", "我的责任", "次要责任"):
+        f.flags["own_fault"] = True
+        f.points.append("当事人自身可能也存在过错")
+    if _hit(text, "未成年", "小孩", "未满 18"):
+        f.flags["minors"] = True
+        f.points.append("涉及未成年人")
+    amts = [a for a in _amounts(text) if a >= 100]
+    if amts:
+        f.points.append(f"涉及金额约 {_fmt(max(amts))}")
+
+
 _EXTRACTORS = {
     "rental": _rental,
     "parttime": _parttime,
     "consumer": _consumer,
     "ip": _ip,
     "loan": _loan,
+    "network": _network,
+    "marriage": _marriage,
+    "injury": _injury,
 }
 
 

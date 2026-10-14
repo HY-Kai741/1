@@ -4,7 +4,7 @@
 断言：
   S1 /api/health 返回 ok 且知识库规模正确；
   S2 静态资源 / /app.js /styles.css 均 200；
-  S3 /api/scenes 返回 5 个专项领域；
+  S3 /api/scenes 返回 8 个专项领域；
   S4 /api/ask 返回 answer 且引用到预期法条；
   S5 /api/ask/stream 事件序列为 stage* → text* → result → done；
   S6 流式 text 分片拼接后与 result.plainText 逐字节一致；
@@ -88,14 +88,14 @@ def main() -> int:
         check("S1 health 状态 ok", h["status"] == "ok", h.get("status", ""))
         check("S1 知识库规模正确", h["knowledgeBase"]["laws"] == 378 and h["knowledgeBase"]["articles"] == 23995,
               str(h["knowledgeBase"]))
-        check("S1/scenes 五个专项", len(h["scenes"]) == 5, str(h["scenes"]))
+        check("S1/scenes 八个专项", len(h["scenes"]) == 8, str(h["scenes"]))
 
         for path in ("/", "/app.js", "/styles.css"):
             st, raw = get(base, path)
             check(f"S2 静态资源 {path}", st == 200 and len(raw) > 200)
 
         st, raw = get(base, "/api/scenes")
-        check("S3 /api/scenes", st == 200 and len(json.loads(raw)["scenes"]) == 5)
+        check("S3 /api/scenes", st == 200 and len(json.loads(raw)["scenes"]) == 8)
 
         msg = "我大二，在学校附近租房，退租时房东不退我押金，说我把墙弄脏了。"
         st, _, raw = post(base, "/api/ask", {"message": msg})

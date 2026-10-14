@@ -1,0 +1,618 @@
+{
+  "_comment": "知识点体系（L2 层）。每个知识点锚定 laws.db 中可核验的法条，是出题骨架与教学路径的基础。scene 取值对应 scene_map.json 的场景 id。bloom 为认知层级（记忆/理解/应用/分析），difficulty 为预设难度 1-5。法条引用在构建期由 scripts/validate_bank.py 回库核验。",
+  "version": "1.0.0",
+  "knowledge_points": [
+    {
+      "id": "kp.rental.contract_form",
+      "scene": "rental",
+      "name": "租赁合同的形式与成立",
+      "desc": "租赁合同并非必须书面；租期六个月以上的应当采用书面形式，未采用书面形式且无法确定租赁期限的视为不定期租赁。用于回答「只有微信聊天记录算不算签了合同」。",
+      "statutes": [{"law": "民法典", "article": 703}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.rental.deposit_return",
+      "scene": "rental",
+      "name": "租期届满返还房屋与押金",
+      "desc": "租赁期限届满，承租人应当返还租赁物；房屋返还且无正当扣款事由时，出租人应退还押金。是「押金能不能要回来」的核心依据。",
+      "statutes": [{"law": "民法典", "article": 733}],
+      "bloom": "应用",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.rental.repair_duty",
+      "scene": "rental",
+      "name": "出租人的维修义务",
+      "desc": "除当事人另有约定外，出租人应当履行租赁物的维修义务。用于判断「漏水、空调坏了该谁出钱修」。",
+      "statutes": [{"law": "民法典", "article": 713}],
+      "bloom": "应用",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.rental.tenant_care",
+      "scene": "rental",
+      "name": "承租人的保管义务与损坏赔偿",
+      "desc": "承租人应妥善保管租赁物，因保管不善造成毁损、灭失的应承担赔偿责任。用于区分「正常使用磨损」与「人为损坏」。",
+      "statutes": [{"law": "民法典", "article": 714}],
+      "bloom": "分析",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.rental.rent_arrears",
+      "scene": "rental",
+      "name": "欠租时房东须先催告",
+      "desc": "承租人无正当理由未支付租金，出租人须先催告其在合理期限内支付；逾期仍不支付的才可解除合同。用于判断「房东能不能直接赶人」。",
+      "statutes": [{"law": "民法典", "article": 722}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.rental.breach",
+      "scene": "rental",
+      "name": "违约责任的一般规定",
+      "desc": "一方不履行合同义务或履行不符合约定的，应承担继续履行、采取补救措施或赔偿损失等违约责任。是各类「对方违约了怎么办」的兜底依据。",
+      "statutes": [{"law": "民法典", "article": 577}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.rental.early_exit",
+      "scene": "rental",
+      "name": "提前退租的后果",
+      "desc": "提前退租属于不按约定履行合同义务，可能构成违约并需赔偿损失；但赔偿以实际损失为基础，不等于押金必然全部扣除。",
+      "statutes": [{"law": "民法典", "article": 577}, {"law": "民法典", "article": 733}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.rental.damage_split",
+      "scene": "rental",
+      "name": "房屋损坏的责任划分",
+      "desc": "房屋自然老化或非因承租人原因造成的损坏由出租人维修；因承租人保管不善造成的损坏由承租人担责。核心是「损坏原因归谁」。",
+      "statutes": [{"law": "民法典", "article": 713}, {"law": "民法典", "article": 714}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.parttime.nonfulltime_def",
+      "scene": "parttime",
+      "name": "非全日制用工的定义",
+      "desc": "以小时计酬为主，劳动者在同一用人单位一般平均每日工作时间不超过四小时、每周累计不超过二十四小时的用工形式。用于判断「我这份兼职算什么用工」。",
+      "statutes": [{"law": "劳动合同法", "article": 68}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.parttime.oral_ok",
+      "scene": "parttime",
+      "name": "非全日制用工可以口头约定",
+      "desc": "非全日制用工双方当事人可以订立口头协议。用于回答「没签书面合同是不是就白干了」。",
+      "statutes": [{"law": "劳动合同法", "article": 69}],
+      "bloom": "记忆",
+      "difficulty": 1
+    },
+    {
+      "id": "kp.parttime.no_probation",
+      "scene": "parttime",
+      "name": "非全日制用工不得约定试用期",
+      "desc": "非全日制用工双方当事人不得约定试用期。用于识别「兼职还让我试岗不给钱」是否合法。",
+      "statutes": [{"law": "劳动合同法", "article": 70}],
+      "bloom": "记忆",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.parttime.wage_settlement",
+      "scene": "parttime",
+      "name": "非全日制工资标准与结算周期",
+      "desc": "非全日制用工小时计酬标准不得低于当地最低小时工资标准；劳动报酬结算支付周期最长不得超过十五日。",
+      "statutes": [{"law": "劳动合同法", "article": 72}],
+      "bloom": "记忆",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.parttime.timely_pay",
+      "scene": "parttime",
+      "name": "及时足额支付劳动报酬",
+      "desc": "用人单位应当按照劳动合同约定和国家规定，向劳动者及时足额支付劳动报酬；拖欠或未足额支付的，劳动者可依法向法院申请支付令。",
+      "statutes": [{"law": "劳动合同法", "article": 30}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.parttime.arrears_liability",
+      "scene": "parttime",
+      "name": "拖欠劳动报酬的责任",
+      "desc": "用人单位拖欠劳动报酬的，由劳动行政部门责令限期支付；逾期不支付的，责令按应付金额一定比例加付赔偿金。",
+      "statutes": [{"law": "劳动合同法", "article": 85}],
+      "bloom": "理解",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.parttime.no_deduction",
+      "scene": "parttime",
+      "name": "工资不得克扣或无故拖欠",
+      "desc": "工资应当以货币形式按月支付给劳动者本人，不得克扣或者无故拖欠劳动者的工资。",
+      "statutes": [{"law": "劳动法", "article": 50}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.parttime.arbitration_limit",
+      "scene": "parttime",
+      "name": "劳动仲裁时效一年",
+      "desc": "劳动争议申请仲裁的时效期间为一年，从当事人知道或应当知道其权利被侵害之日起计算。用于提醒「欠薪别拖太久」。",
+      "statutes": [{"law": "劳动争议调解仲裁法", "article": 27}],
+      "bloom": "记忆",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.parttime.service_contract",
+      "scene": "parttime",
+      "name": "劳务关系下的报酬请求",
+      "desc": "不属于劳动关系（如个人之间雇请帮工）时，可依合同关系要求对方支付报酬；一方未支付报酬的，对方可以请求其支付。",
+      "statutes": [{"law": "民法典", "article": 579}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.consumer.quality_return",
+      "scene": "consumer",
+      "name": "质量不合格的退换修",
+      "desc": "商品不符合质量要求的，消费者可以依约定或国家规定要求退货、更换、修理。用于处理「买到坏的东西能不能退」。",
+      "statutes": [{"law": "消费者权益保护法", "article": 24}],
+      "bloom": "应用",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.consumer.seven_day",
+      "scene": "consumer",
+      "name": "网购七日无理由退货及例外",
+      "desc": "经营者采用网络等方式销售商品的，消费者有权自收到商品之日起七日内退货且无需说明理由；但定作、鲜活易腐、已拆封的音像制品或软件、报纸期刊等除外。",
+      "statutes": [{"law": "消费者权益保护法", "article": 25}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.consumer.dispute_channels",
+      "scene": "consumer",
+      "name": "消费争议的五种解决途径",
+      "desc": "与经营者协商和解、请求消费者协会或其他调解组织调解、向有关行政部门投诉、提请仲裁机构仲裁、向人民法院提起诉讼。",
+      "statutes": [{"law": "消费者权益保护法", "article": 39}],
+      "bloom": "记忆",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.consumer.fraud_triple",
+      "scene": "consumer",
+      "name": "欺诈的三倍赔偿",
+      "desc": "经营者提供商品或服务有欺诈行为的，应按消费者要求增加赔偿其受到的损失，增加赔偿的金额为消费者购买商品价款或接受服务费用的三倍。",
+      "statutes": [{"law": "消费者权益保护法", "article": 55}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.consumer.order_contract",
+      "scene": "consumer",
+      "name": "下单成功即合同成立",
+      "desc": "电子商务中，消费者选择商品或服务并提交订单成功，合同即告成立。用于回答「商家以标错价为由不发货行不行」。",
+      "statutes": [{"law": "电子商务法", "article": 49}],
+      "bloom": "理解",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.consumer.food_safety",
+      "scene": "consumer",
+      "name": "不符合食品安全标准的赔偿",
+      "desc": "生产不符合食品安全标准的食品或经营明知不符合标准的食品，消费者除要求赔偿损失外，还可要求支付价款十倍或损失三倍的赔偿金；增加赔偿的金额不足一千元的，为一千元。",
+      "statutes": [{"law": "食品安全法", "article": 148}],
+      "bloom": "应用",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.consumer.evidence",
+      "scene": "consumer",
+      "name": "消费维权的证据准备",
+      "desc": "主张退货与赔偿需能证明购买事实与商品问题：订单、支付记录、开箱视频、聊天记录构成证据链。本知识点侧重程序意识，不限于单一条文。",
+      "statutes": [{"law": "消费者权益保护法", "article": 24}, {"law": "消费者权益保护法", "article": 39}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.ip.work_def",
+      "scene": "ip",
+      "name": "什么构成受保护的作品",
+      "desc": "文学、艺术和科学领域内具有独创性并能以一定形式表现的智力成果属于作品。用于判断「我的课程作业、设计稿算不算作品」。",
+      "statutes": [{"law": "著作权法", "article": 3}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.ip.authorship",
+      "scene": "ip",
+      "name": "著作权属于作者",
+      "desc": "除法律另有规定外，著作权属于作者。用于确定「谁有权主张权利」。",
+      "statutes": [{"law": "著作权法", "article": 11}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.ip.plagiarism",
+      "scene": "ip",
+      "name": "剽窃的侵权责任",
+      "desc": "剽窃他人作品等行为属于侵权行为，应承担停止侵害、消除影响、赔礼道歉、赔偿损失等民事责任。",
+      "statutes": [{"law": "著作权法", "article": 52}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.ip.attribution",
+      "scene": "ip",
+      "name": "署名权与未署名的侵权",
+      "desc": "删除或改变作者署名属于侵权行为的典型情形之一。用于回答「别人用了我的东西却不写我名字」。",
+      "statutes": [{"law": "著作权法", "article": 52}, {"law": "著作权法", "article": 11}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.ip.compensation",
+      "scene": "ip",
+      "name": "侵权赔偿的计算方式",
+      "desc": "侵权赔偿按权利人实际损失、侵权人违法所得或权利使用费确定；难以计算的，由法院根据情节在法定幅度内酌情确定。",
+      "statutes": [{"law": "著作权法", "article": 54}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.ip.punitive",
+      "scene": "ip",
+      "name": "故意侵权的惩罚性赔偿",
+      "desc": "故意侵害他人知识产权且情节严重的，被侵权人有权请求相应的惩罚性赔偿。",
+      "statutes": [{"law": "民法典", "article": 1185}],
+      "bloom": "理解",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.ip.fault_liability",
+      "scene": "ip",
+      "name": "过错侵权责任一般条款",
+      "desc": "行为人因过错侵害他人民事权益造成损害的，应当承担侵权责任。是著作权之外各类「被抄、被盗用」情形的兜底依据。",
+      "statutes": [{"law": "民法典", "article": 1165}],
+      "bloom": "理解",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.loan.contract_def",
+      "scene": "loan",
+      "name": "借款合同的定义",
+      "desc": "借款合同是借款人向贷款人借款，到期返还借款并支付利息的合同。用于判断「这层关系受不受借贷法律规则约束」。",
+      "statutes": [{"law": "民法典", "article": 667}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.loan.no_usury",
+      "scene": "loan",
+      "name": "禁止高利放贷",
+      "desc": "禁止高利放贷，借款的利率不得违反国家有关规定。是识别「校园贷、网贷利息太离谱」的核心依据（具体利率上限须结合司法解释另行核实）。",
+      "statutes": [{"law": "民法典", "article": 680}],
+      "bloom": "应用",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.loan.interest_deduct",
+      "scene": "loan",
+      "name": "砍头息：利息不得预先扣除",
+      "desc": "借款的利息不得预先在本金中扣除。预先扣除的，应当按照实际借款数额返还借款并计算利息。用于识别「借5000到手4200」。",
+      "statutes": [{"law": "民法典", "article": 670}],
+      "bloom": "分析",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.loan.overdue_interest",
+      "scene": "loan",
+      "name": "逾期利息",
+      "desc": "借款人未按照约定的期限返还借款的，应当按照约定或者国家有关规定支付逾期利息。",
+      "statutes": [{"law": "民法典", "article": 676}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.loan.repay_term",
+      "scene": "loan",
+      "name": "按约定期限返还借款",
+      "desc": "借款人应当按照约定的期限返还借款。用于处理「什么时候该还、什么时候算违约」。",
+      "statutes": [{"law": "民法典", "article": 675}],
+      "bloom": "记忆",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.loan.interest_pay",
+      "scene": "loan",
+      "name": "按约定期限支付利息",
+      "desc": "借款人应当按照约定的期限支付利息。用于区分本金与利息各自的履行义务。",
+      "statutes": [{"law": "民法典", "article": 674}],
+      "bloom": "记忆",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.loan.written_form",
+      "scene": "loan",
+      "name": "借款合同的形式与内容",
+      "desc": "借款合同应当采用书面形式，但自然人之间借款另有约定的除外；内容一般包括借款种类、币种、用途、数额、利率、期限和还款方式等。",
+      "statutes": [{"law": "民法典", "article": 668}],
+      "bloom": "理解",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.loan.offset_order",
+      "scene": "loan",
+      "name": "清偿抵充顺序",
+      "desc": "债务人的给付不足以清偿全部债务时，除当事人另有约定外，应当先抵充实现债权的有关费用，再抵充利息，最后抵充主债务。用于判断「还的钱先算利息还是本金」。",
+      "statutes": [{"law": "民法典", "article": 561}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.network.legal_basis",
+      "scene": "network",
+      "name": "处理个人信息的原则与条件",
+      "desc": "处理个人信息应遵循合法、正当、必要原则，不得过度处理，通常还需征得该自然人（未成年人则为其监护人）同意，并公开处理规则、明示目的与范围。用于判断「App 收集这些信息到底合不合规」。",
+      "statutes": [{"law": "民法典", "article": 1035}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.network.no_leak",
+      "scene": "network",
+      "name": "不得泄露、篡改个人信息",
+      "desc": "信息处理者不得泄露或篡改其收集、存储的个人信息，未经自然人同意不得向他人非法提供。用于处理「我的信息被泄露了该找谁」的问题。",
+      "statutes": [{"law": "民法典", "article": 1038}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.network.consent",
+      "scene": "network",
+      "name": "处理个人信息须取得同意",
+      "desc": "基于个人同意处理个人信息的，该同意应由个人在充分知情的前提下自愿、明确作出；处理目的、方式或信息种类发生变更的，应当重新取得同意。用于识别「勾选一个总协议就包打天下」不成立。",
+      "statutes": [{"law": "个人信息保护法", "article": 14}],
+      "bloom": "应用",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.network.inform",
+      "scene": "network",
+      "name": "处理前的告知义务",
+      "desc": "处理个人信息前，应以显著方式、清晰易懂的语言真实准确完整地告知处理者身份与联系方式、处理目的方式与信息种类和保存期限、个人行使权利的方式与程序。",
+      "statutes": [{"law": "个人信息保护法", "article": 17}],
+      "bloom": "记忆",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.network.rights",
+      "scene": "network",
+      "name": "个人的知情权与决定权",
+      "desc": "个人对其个人信息的处理享有知情权、决定权，有权限制或拒绝他人对其个人信息进行处理（法律、行政法规另有规定的除外）。这是反驳「强制授权」的直接依据。",
+      "statutes": [{"law": "个人信息保护法", "article": 44}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.network.deletion",
+      "scene": "network",
+      "name": "个人信息的删除权",
+      "desc": "处理目的已实现或不再必要、处理者停止提供服务、保存期限届满、个人撤回同意，或处理者违法处理时，处理者应主动删除；未删除的，个人有权请求删除。用于回答「能不能要求注销并删数据」。",
+      "statutes": [{"law": "个人信息保护法", "article": 47}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.network.liability",
+      "scene": "network",
+      "name": "个人信息侵权的过错推定责任",
+      "desc": "处理个人信息侵害个人信息权益造成损害，处理者不能证明自己没有过错的，应当承担损害赔偿等侵权责任——举证责任在信息处理者一方。",
+      "statutes": [{"law": "个人信息保护法", "article": 69}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.network.two_cards",
+      "scene": "network",
+      "name": "电话卡、银行账户不得买卖出租出借",
+      "desc": "任何单位和个人不得非法买卖、出租、出借电话卡、银行账户、支付账户、互联网账号等，不得提供实名核验帮助。用于回答「帮人过账收好处费有什么风险」。",
+      "statutes": [{"law": "反电信网络诈骗法", "article": 31}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.network.force_authorize",
+      "scene": "network",
+      "name": "强制授权的违法性",
+      "desc": "以「不同意授权就不能使用」相要挟，迫使用户超出必要范围提供个人信息，既违反处理个人信息的必要原则，也侵害个人的决定权。综合运用合法必要原则与同意规则判断。",
+      "statutes": [{"law": "民法典", "article": 1035}, {"law": "个人信息保护法", "article": 14}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.network.leak_remedy",
+      "scene": "network",
+      "name": "信息泄露后的救济",
+      "desc": "发生或可能发生个人信息泄露、篡改、丢失的，处理者应当立即采取补救措施、按规定告知个人并向主管部门报告；造成损害的，个人可要求其承担赔偿责任。",
+      "statutes": [{"law": "民法典", "article": 1038}, {"law": "个人信息保护法", "article": 69}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.marriage.gift_def",
+      "scene": "marriage",
+      "name": "赠与合同的定义",
+      "desc": "赠与合同是赠与人将自己的财产无偿给予受赠人，受赠人表示接受赠与的合同。用于判断恋爱期间的转账、礼物在法律上是不是赠与。",
+      "statutes": [{"law": "民法典", "article": 657}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.marriage.gift_revoke",
+      "scene": "marriage",
+      "name": "赠与在权利转移前可以撤销",
+      "desc": "赠与人在赠与财产的权利转移之前可以撤销赠与；但经过公证，或具有救灾、扶贫、助残等公益、道德义务性质的赠与不适用。用于回答「说好要送的东西还能反悔吗」。",
+      "statutes": [{"law": "民法典", "article": 658}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.marriage.betrothal",
+      "scene": "marriage",
+      "name": "禁止借婚姻索取财物（彩礼）",
+      "desc": "法律禁止包办、买卖婚姻和其他干涉婚姻自由的行为，禁止借婚姻索取财物。是判断彩礼给付性质的第一条依据（具体返还规则还须结合司法解释与个案事实，本系统未收录司法解释）。",
+      "statutes": [{"law": "民法典", "article": 1042}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.marriage.community_property",
+      "scene": "marriage",
+      "name": "夫妻共同财产的范围",
+      "desc": "婚姻关系存续期间所得的工资奖金劳务报酬、生产经营投资收益、知识产权收益、继承或受赠的财产等，为夫妻共同财产，双方有平等的处理权。",
+      "statutes": [{"law": "民法典", "article": 1062}],
+      "bloom": "理解",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.marriage.personal_property",
+      "scene": "marriage",
+      "name": "夫妻一方的个人财产",
+      "desc": "一方的婚前财产、因受到人身损害获得的赔偿或补偿、遗嘱或赠与合同中确定只归一方的财产、一方专用的生活用品等，属于个人财产，不因结婚自动转为共同财产。",
+      "statutes": [{"law": "民法典", "article": 1063}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.marriage.joint_debt",
+      "scene": "marriage",
+      "name": "夫妻共同债务的认定",
+      "desc": "夫妻双方共同签名或一方事后追认等共同意思表示所负的债务，以及一方为家庭日常生活需要所负的债务，属于共同债务；一方以个人名义超出家庭日常生活需要所负的债务原则上不算共同债务，除非债权人能证明用于共同生活、共同经营或基于共同意思。",
+      "statutes": [{"law": "民法典", "article": 1064}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.marriage.divorce_split",
+      "scene": "marriage",
+      "name": "离婚时共同财产的分割",
+      "desc": "离婚时共同财产由双方协议处理；协议不成由法院根据财产的具体情况判决，并按照照顾子女、女方和无过错方权益的原则处理。",
+      "statutes": [{"law": "民法典", "article": 1087}],
+      "bloom": "理解",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.marriage.divorce_damages",
+      "scene": "marriage",
+      "name": "离婚损害赔偿的法定情形",
+      "desc": "因重婚、与他人同居、实施家庭暴力、虐待或遗弃家庭成员，或有其他重大过错导致离婚的，无过错方有权请求损害赔偿。",
+      "statutes": [{"law": "民法典", "article": 1091}],
+      "bloom": "应用",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.marriage.love_gift",
+      "scene": "marriage",
+      "name": "恋爱期间转账与礼物的定性",
+      "desc": "恋爱期间的小额、节日性支出通常被认定为赠与，交付后一般不能要求返还；大额、附结婚条件的给付则可能被认定为以结婚为目的的给付或借贷。核心是先定性、再谈返还。",
+      "statutes": [{"law": "民法典", "article": 657}, {"law": "民法典", "article": 658}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.injury.fault_liability",
+      "scene": "injury",
+      "name": "过错侵权责任的一般规定",
+      "desc": "行为人因过错侵害他人民事权益造成损害的，应当承担侵权责任；法律规定推定行为人有过错，其不能证明自己没有过错的，应当承担侵权责任。",
+      "statutes": [{"law": "民法典", "article": 1165}],
+      "bloom": "理解",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.injury.comparative_fault",
+      "scene": "injury",
+      "name": "被侵权人有过错可以减轻责任",
+      "desc": "被侵权人对同一损害的发生或扩大有过错的，可以减轻侵权人的责任。用于回应「我自己也有责任，还能全额索赔吗」。",
+      "statutes": [{"law": "民法典", "article": 1173}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.injury.damage_scope",
+      "scene": "injury",
+      "name": "人身损害赔偿的范围",
+      "desc": "侵害他人造成人身损害的，应赔偿医疗费、护理费、交通费、营养费、住院伙食补助费等治疗康复的合理费用及误工减少的收入；造成残疾或死亡的另有相应赔偿项目。",
+      "statutes": [{"law": "民法典", "article": 1179}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.injury.mental_damage",
+      "scene": "injury",
+      "name": "精神损害赔偿",
+      "desc": "侵害自然人人身权益造成严重精神损害的，被侵权人有权请求精神损害赔偿；因故意或重大过失侵害具有人身意义的特定物并造成严重精神损害的，同样可以请求。",
+      "statutes": [{"law": "民法典", "article": 1183}],
+      "bloom": "理解",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.injury.safety_duty",
+      "scene": "injury",
+      "name": "经营与公共场所的安全保障义务",
+      "desc": "宾馆、商场、车站、体育场馆等经营场所、公共场所的经营者、管理者或群众性活动的组织者，未尽到安全保障义务造成他人损害的应承担侵权责任；因第三人行为造成损害的由第三人担责，场所方未尽义务的承担相应补充责任。",
+      "statutes": [{"law": "民法典", "article": 1198}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.injury.insurance_order",
+      "scene": "injury",
+      "name": "交通事故赔偿的保险顺序",
+      "desc": "属于机动车一方责任的，先由交强险在责任限额内赔，不足部分由商业三者险按合同赔，仍不足或没有商业险的才由侵权人赔偿。",
+      "statutes": [{"law": "民法典", "article": 1213}],
+      "bloom": "应用",
+      "difficulty": 3
+    },
+    {
+      "id": "kp.injury.good_samaritan",
+      "scene": "injury",
+      "name": "好意同乘的减轻责任",
+      "desc": "非营运机动车发生交通事故造成无偿搭乘人损害，属于该机动车一方责任的，应当减轻其赔偿责任，但机动车使用人有故意或重大过失的除外。",
+      "statutes": [{"law": "民法典", "article": 1217}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.injury.scene_duty",
+      "scene": "injury",
+      "name": "事故后的停车、抢救与报警义务",
+      "desc": "在道路上发生交通事故，驾驶人应立即停车、保护现场；造成人身伤亡的应立即抢救受伤人员并迅速报警。未造成人身伤亡且事实成因无争议的，可撤离现场自行协商。",
+      "statutes": [{"law": "道路交通安全法", "article": 70}],
+      "bloom": "记忆",
+      "difficulty": 2
+    },
+    {
+      "id": "kp.injury.traffic_allocation",
+      "scene": "injury",
+      "name": "交通事故的责任划分与赔偿",
+      "desc": "交强险限额内先行赔偿，不足部分按责任分担：机动车之间按过错比例；机动车与非机动车、行人之间，非机动车方无过错的由机动车一方赔，有过错的可减轻机动车责任，机动车无过错也承担不超过百分之十；对方故意碰撞的机动车一方不赔。",
+      "statutes": [{"law": "道路交通安全法", "article": 76}],
+      "bloom": "分析",
+      "difficulty": 4
+    },
+    {
+      "id": "kp.injury.campus_accident",
+      "scene": "injury",
+      "name": "校园内受伤的责任",
+      "desc": "在校内场所因场地管理方未尽安全保障义务而受伤，可依安全保障义务主张责任；若由他人行为造成，则由该他人承担侵权责任，管理方未尽义务的承担相应补充责任。",
+      "statutes": [{"law": "民法典", "article": 1198}, {"law": "民法典", "article": 1165}],
+      "bloom": "分析",
+      "difficulty": 4
+    }
+  ]
+}
